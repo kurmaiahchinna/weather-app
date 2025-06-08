@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Weather App</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(to right, #74ebd5, #acb6e5);
+            color: #333;
+            text-align: center;
+            padding: 40px;
+        }
+        .container {
+            max-width: 450px;
+            margin: auto;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        input, button {
+            padding: 10px 15px;
+            font-size: 16px;
+            border: none;
+            margin: 10px;
+            border-radius: 8px;
+        }
+        input {
+            width: 60%;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        .weather-box {
+            margin-top: 20px;
+        }
+        .weather-icon {
+            width: 100px;
+        }
+        .error {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌤 Real-Time Weather</h1>
+        <form method="POST">
+            {% csrf_token %}
+            <input type="text" name="city" placeholder="Enter city..." required />
+            <button type="submit">Search</button>
+        </form>
+
+        {% if weather.error %}
+            <p class="error">{{ weather.error }}</p>
+        {% elif weather.city %}
+            <div class="weather-box">
+                <h2>{{ weather.city }}</h2>
+                <img class="weather-icon" src="http://openweathermap.org/img/wn/{{ weather.icon }}@2x.png" alt="weather icon" />
+                <h3>{{ weather.description|title }}</h3>
+                <p><strong>{{ weather.temperature }}°C</strong></p>
+                <p>Humidity: {{ weather.humidity }}% | Wind: {{ weather.wind }} m/s</p>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>
